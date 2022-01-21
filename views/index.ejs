@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>test</h1>
+    <ul id="test">
+
+    </ul>
+    <form action="http://localhost:8080/person/create" method="post">
+        <input type="text" name="name" id="name" placeholder="Name">
+        <input type="text" name="surname" id="surname" placeholder="Surname">
+        <input type="number" name="age" id="age" placeholder="age">
+        <select id="gender" name="gender">
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+        </select>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+<script
+			  src="https://code.jquery.com/jquery-3.6.0.min.js"
+			  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+			  crossorigin="anonymous"></script>
+<script>
+    $('document').ready(function(){
+        //api call for data
+        console.log('bruh')
+        $.getJSON('/persons').done(function (data) {
+            console.log(data);
+            $.each(data, function (key, value) {
+                let txt = `<li><a href="/person/${value.id}">${value.name} ${value.surname}</a>`
+                $('#test').append(txt);
+            });
+        });
+    });
+    
+</script>
+</html>

@@ -1,10 +1,13 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const bodyParser = require('body-parser')
 const mysql = require('mysql');
 const PORT = 8080
 const app = express();
 
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs')
 app.use(cors());
 app.options('*', cors());
 app.use( bodyParser.json() );     
@@ -51,6 +54,10 @@ db.connect((err) => {
 //     })
 // });
 
+app.get('/', (req, res) => {
+    res.render('index.ejs')
+})
+
 // insert data
 app.post('/person/create', (req, res) => {
     let post = {
@@ -63,7 +70,7 @@ app.post('/person/create', (req, res) => {
     let query = db.query(sql, post, (err, result) => {
         if(err) throw err;
         console.log(result)
-        res.redirect('http://localhost:8000')
+        res.redirect('/')
     })
 });
 
@@ -78,12 +85,12 @@ app.get('/persons', (req, res) => {
 })
 
 // get single persons
-app.get('/persons/:id', (req, res) => {
+app.get('/person/:id', (req, res) => {
     let sql = `SELECT * FROM person WHERE id = ${req.params.id}`
     db.query(sql, (err, result) => {
         if(err) throw err;
         console.log(result)
-        res.send('posts fetched')
+        res.render('person/show.ejs', {'data': result})
     })
 })
 
